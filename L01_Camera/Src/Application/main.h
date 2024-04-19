@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿
+#pragma once
 
 //============================================================
 // アプリケーションクラス
@@ -6,11 +7,12 @@
 //============================================================
 class Application
 {
-// メンバ
+	// メンバ
 public:
 
 	// アプリケーション実行
 	void Execute();
+
 
 	// アプリケーション終了
 	void End() { m_endFlag = true; }
@@ -51,17 +53,22 @@ private:
 	// ゲーム終了フラグ trueで終了する
 	bool		m_endFlag = false;
 
-	int test;
+	//カメラ
+	std::shared_ptr<KdCamera> m_spCamera = nullptr;
 
-//=====================================================
-// シングルトンパターン
-//=====================================================
+	//板ポリゴン
+	std::shared_ptr<KdSquarePolygon> m_spPoly = nullptr;
+
+
+	//=====================================================
+	// シングルトンパターン
+	//=====================================================
 private:
 	// 
 	Application() {}
 
 public:
-	static Application &Instance(){
+	static Application& Instance() {
 		static Application Instance;
 		return Instance;
 	}
