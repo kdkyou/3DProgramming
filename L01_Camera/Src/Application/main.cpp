@@ -65,6 +65,31 @@ void Application::PreUpdate()
 // ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
 void Application::Update()
 {
+
+	//カメラ行列の更新
+	if (GetAsyncKeyState(VK_UP) & 0x8000)
+	{
+		Math::Matrix _localPos =
+			Math::Matrix::CreateTranslation(0, 6, 0);
+
+		//カメラのワールド行列を作成し、適応させる
+		Math::Matrix _worldMat = _localPos;
+		m_spCamera->SetCameraMatrix(_worldMat);
+	}
+	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
+	{
+		
+	}
+	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+	{
+	
+	}
+	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+	{
+
+	}
+
+	
 }
 
 // ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
@@ -122,8 +147,11 @@ void Application::Draw()
 	// 陰影のあるオブジェクト(不透明な物体や2Dキャラ)はBeginとEndの間にまとめてDrawする
 	KdShaderManager::Instance().m_StandardShader.BeginLit();
 	{
+		//Math::Matrix _mat = Math::Matrix::Identity;
 		Math::Matrix _mat = Math::Matrix::CreateTranslation(0, 0, 5);
 		KdShaderManager::Instance().m_StandardShader.DrawPolygon(*m_spPoly, _mat);
+		
+		KdShaderManager::Instance().m_StandardShader.DrawModel(*m_spModel);
 	}
 	KdShaderManager::Instance().m_StandardShader.EndLit();
 
@@ -183,9 +211,9 @@ bool Application::Init(int w, int h)
 	// フルスクリーン確認
 	//===================================================================
 	bool bFullScreen = false;
-	if (MessageBoxA(m_window.GetWndHandle(), "フルスクリーンにしますか？", "確認", MB_YESNO | MB_ICONQUESTION | MB_DEFBUTTON2) == IDYES) {
+	/*if (MessageBoxA(m_window.GetWndHandle(), "フルスクリーンにしますか？", "確認", MB_YESNO | MB_ICONQUESTION | MB_DEFBUTTON2) == IDYES) {
 		bFullScreen = true;
-	}
+	}*/
 
 	//===================================================================
 	// Direct3D初期化
@@ -236,6 +264,12 @@ bool Application::Init(int w, int h)
 	//===================================================================
 	m_spPoly = std::make_shared<KdSquarePolygon>();
 	m_spPoly->SetMaterial("Asset/Data/LessonData/Character/Hamu.png");
+
+	//===================================================================
+	//地形モデル初期化
+	//===================================================================
+	m_spModel = std::make_shared<KdModelData>();
+	m_spModel->Load("Asset/Data/LessonData/Terrain/Terrain.gltf");
 
 	return true;
 }
