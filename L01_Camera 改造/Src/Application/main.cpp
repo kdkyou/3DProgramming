@@ -1,9 +1,6 @@
 ﻿
 #include "main.h"
 
-#include"HamuHamu.h"
-#include"Terrain.h"
-
 // ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
 // エントリーポイント
 // アプリケーションはこの関数から進行する
@@ -68,9 +65,27 @@ void Application::PreUpdate()
 // ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
 void Application::Update()
 {
-	
+	static int _xRot = 0;
+	static int _yRot = 0;
+	static int _zRot = 0;
 
-		//カメラ行列の更新
+	++_xRot;
+	if (_xRot>360)
+	{
+		_xRot = 0;
+	}
+	_yRot+=3;
+	if (_yRot > 360)
+	{
+		_yRot = 0;
+	}
+	_zRot+=2;
+	if (_zRot > 360)
+	{
+		_zRot = 0;
+	}
+
+	//カメラ行列の更新
 	{
 		Math::Matrix mScale =
 			Math::Matrix::CreateScale(1.0f);
@@ -78,30 +93,81 @@ void Application::Update()
 		//どれだけ傾けているか
 		Math::Matrix _mRotation =
 			Math::Matrix::CreateRotationX(DirectX::XMConvertToRadians(45));
-
-		static float _yRot = 0;
+		Math::Matrix _mRotationX =
+			Math::Matrix::CreateRotationX(DirectX::XMConvertToRadians(_xRot));
 		Math::Matrix _mRotationY =
 			Math::Matrix::CreateRotationY(DirectX::XMConvertToRadians(_yRot));
-		//_yRot += 0.5f;
-		
-		
+		Math::Matrix _mRotationZ =
+			Math::Matrix::CreateRotationZ(DirectX::XMConvertToRadians(_zRot));
+
 		//何処に配置されてるか
+		Math::Matrix _mTrans =
+			Math::Matrix::CreateTranslation(0.0f, 6.0f + sin(DirectX::XMConvertToRadians(_xRot))*2.0f, -5.0f+sin(DirectX::XMConvertToRadians(_xRot))*3.0f);
+			//Math::Matrix::CreateTranslation(0.0f + cos(DirectX::XMConvertToRadians(angleX)), 6.0f, -5.0f+sin(DirectX::XMConvertToRadians(angleX)));
+			//Math::Matrix::CreateTranslation(0.0f, 6.0f, -5.0f);
+
+		//カメラのワールド行列を作成し、適応させる
+		Math::Matrix _worldMat = mScale * _mRotation * _mTrans ;
+		//m_spPoly->GetPositions()
+		m_spCamera->SetCameraMatrix(_worldMat);
+	}
+	//カメラ行列の更新
+	if (GetAsyncKeyState(VK_UP) & 0x8000)
+	{
 		Math::Matrix _mTrans =
 			Math::Matrix::CreateTranslation(0.0f, 6.0f, -5.0f);
 
+		//どれだけ傾けているか
+		Math::Matrix _mRotation =
+			Math::Matrix::CreateRotationX(DirectX::XMConvertToRadians(45));
+
 		//カメラのワールド行列を作成し、適応させる
-		Math::Matrix _worldMat = mScale * _mRotation * _mTrans * _mRotationY ;
+		Math::Matrix _worldMat = _mRotation*_mTrans;
 		m_spCamera->SetCameraMatrix(_worldMat);
 	}
-	
-	//全ゲームオブジェクトの更新
+	if (GetAsyncKeyState(VK_DOWN) & 0x8000)
 	{
-		//全ゲームオブジェクト描画(範囲ベースfor)
-		for (std::shared_ptr<KdGameObject>obj : m_GameObjList)
-		{
-			obj->Update();
-		}
+		Math::Matrix _mTrans =
+			Math::Matrix::CreateTranslation(0.0f, -6.0f, -5.0f);
+
+		//どれだけ傾けているか
+		Math::Matrix _mRotation =
+			Math::Matrix::CreateRotationX(DirectX::XMConvertToRadians(315));
+
+		//カメラのワールド行列を作成し、適応させる
+		//ワールド行列の計算順序が絶対重要
+		// W = S * R *T
+		//	S...scale R...rotation T...translation
+		Math::Matrix _worldMat = _mRotation * _mTrans;
+		m_spCamera->SetCameraMatrix(_worldMat);
 	}
+	if (GetAsyncKeyState(VK_RIGHT) & 0x8000)
+	{
+		Math::Matrix _mTrans =
+			Math::Matrix::CreateTranslation(6.0f, 0.0f, -5.0f);
+
+		//どれだけ傾けているか
+		Math::Matrix _mRotation =
+			Math::Matrix::CreateRotationY(DirectX::XMConvertToRadians(315));
+
+		//カメラのワールド行列を作成し、適応させる
+		Math::Matrix _worldMat = _mRotation * _mTrans;
+		m_spCamera->SetCameraMatrix(_worldMat);
+	}
+	if (GetAsyncKeyState(VK_LEFT) & 0x8000)
+	{
+		Math::Matrix _mTrans =
+			Math::Matrix::CreateTranslation(-6.0f, 0.0f, -5.0f);
+
+		//どれだけ傾けているか
+		Math::Matrix _mRotation =
+			Math::Matrix::CreateRotationY(DirectX::XMConvertToRadians(45));
+
+		//カメラのワールド行列を作成し、適応させる
+		Math::Matrix _worldMat = _mRotation * _mTrans;
+		m_spCamera->SetCameraMatrix(_worldMat);
+	}
+
 	
 }
 
@@ -160,11 +226,11 @@ void Application::Draw()
 	// 陰影のあるオブジェクト(不透明な物体や2Dキャラ)はBeginとEndの間にまとめてDrawする
 	KdShaderManager::Instance().m_StandardShader.BeginLit();
 	{
-		//全ゲームオブジェクト描画
-		for (std::shared_ptr<KdGameObject>obj : m_GameObjList)
-		{
-			obj->DrawLit();
-		}
+		Math::Matrix _mat = Math::Matrix::Identity;
+		//Math::Matrix _mat = Math::Matrix::CreateTranslation(0, 0, 5);
+		KdShaderManager::Instance().m_StandardShader.DrawPolygon(*m_spPoly, _mat);
+		
+		KdShaderManager::Instance().m_StandardShader.DrawModel(*m_spModel);
 	}
 	KdShaderManager::Instance().m_StandardShader.EndLit();
 
@@ -275,20 +341,15 @@ bool Application::Init(int w, int h)
 	//===================================================================
 	//ハムスター初期化
 	//===================================================================
-	std::shared_ptr<HamuHamu> _Hamu = std::make_shared<HamuHamu>();
-	_Hamu->Init();
-
-	//★重要★
-	m_GameObjList.push_back(_Hamu);
+	m_spPoly = std::make_shared<KdSquarePolygon>();
+	m_spPoly->SetMaterial("Asset/Data/LessonData/Character/Hamu.png");
+	m_spPoly->SetPivot(KdSquarePolygon::PivotType::Center_Bottom);
 
 	//===================================================================
 	//地形モデル初期化
 	//===================================================================
-	std::shared_ptr<Terrain> _Terrain = std::make_shared<Terrain>();
-	_Terrain->Init();
-
-	//★重要★
-	m_GameObjList.push_back(_Terrain);
+	m_spModel = std::make_shared<KdModelData>();
+	m_spModel->Load("Asset/Data/LessonData/Terrain/Terrain.gltf");
 
 	return true;
 }

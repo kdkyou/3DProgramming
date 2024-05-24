@@ -1,14 +1,14 @@
-﻿
-#include "main.h"
+﻿#include "main.h"
 
-#include"HamuHamu.h"
-#include"Terrain.h"
+#include"Object/Planets/Sun/Sun.h"
+#include"Object/Planets/Earth/Earth.h"
+#include"Object/Planets/Moon/Moon.h"
 
 // ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
 // エントリーポイント
 // アプリケーションはこの関数から進行する
 // ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
-int WINAPI WinMain(_In_ HINSTANCE, _In_opt_  HINSTANCE, _In_ LPSTR, _In_ int)
+int WINAPI WinMain(_In_ HINSTANCE, _In_opt_  HINSTANCE, _In_ LPSTR , _In_ int)
 {
 	// メモリリークを知らせる
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -68,41 +68,10 @@ void Application::PreUpdate()
 // ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
 void Application::Update()
 {
-	
-
-		//カメラ行列の更新
+	for (std::shared_ptr<KdGameObject>obj : m_GameObjList)
 	{
-		Math::Matrix mScale =
-			Math::Matrix::CreateScale(1.0f);
-
-		//どれだけ傾けているか
-		Math::Matrix _mRotation =
-			Math::Matrix::CreateRotationX(DirectX::XMConvertToRadians(45));
-
-		static float _yRot = 0;
-		Math::Matrix _mRotationY =
-			Math::Matrix::CreateRotationY(DirectX::XMConvertToRadians(_yRot));
-		//_yRot += 0.5f;
-		
-		
-		//何処に配置されてるか
-		Math::Matrix _mTrans =
-			Math::Matrix::CreateTranslation(0.0f, 6.0f, -5.0f);
-
-		//カメラのワールド行列を作成し、適応させる
-		Math::Matrix _worldMat = mScale * _mRotation * _mTrans * _mRotationY ;
-		m_spCamera->SetCameraMatrix(_worldMat);
+		obj->Update();
 	}
-	
-	//全ゲームオブジェクトの更新
-	{
-		//全ゲームオブジェクト描画(範囲ベースfor)
-		for (std::shared_ptr<KdGameObject>obj : m_GameObjList)
-		{
-			obj->Update();
-		}
-	}
-	
 }
 
 // ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
@@ -151,7 +120,6 @@ void Application::Draw()
 	// 光を遮るオブジェクト(不透明な物体や2Dキャラ)はBeginとEndの間にまとめてDrawする
 	KdShaderManager::Instance().m_StandardShader.BeginGenerateDepthMapFromLight();
 	{
-
 	}
 	KdShaderManager::Instance().m_StandardShader.EndGenerateDepthMapFromLight();
 
@@ -160,7 +128,6 @@ void Application::Draw()
 	// 陰影のあるオブジェクト(不透明な物体や2Dキャラ)はBeginとEndの間にまとめてDrawする
 	KdShaderManager::Instance().m_StandardShader.BeginLit();
 	{
-		//全ゲームオブジェクト描画
 		for (std::shared_ptr<KdGameObject>obj : m_GameObjList)
 		{
 			obj->DrawLit();
@@ -224,9 +191,9 @@ bool Application::Init(int w, int h)
 	// フルスクリーン確認
 	//===================================================================
 	bool bFullScreen = false;
-	/*if (MessageBoxA(m_window.GetWndHandle(), "フルスクリーンにしますか？", "確認", MB_YESNO | MB_ICONQUESTION | MB_DEFBUTTON2) == IDYES) {
+	if (MessageBoxA(m_window.GetWndHandle(), "フルスクリーンにしますか？", "確認", MB_YESNO | MB_ICONQUESTION | MB_DEFBUTTON2) == IDYES) {
 		bFullScreen = true;
-	}*/
+	}
 
 	//===================================================================
 	// Direct3D初期化
@@ -268,27 +235,29 @@ bool Application::Init(int w, int h)
 	KdAudioManager::Instance().Init();
 
 	//===================================================================
-	//カメラ初期化
+	// カメラ初期化
 	//===================================================================
-	m_spCamera = std::make_shared<KdCamera>();
+	m_spCamera	= std::make_shared<KdCamera>();
+	m_spCamera->SetCameraMatrix(Math::Matrix::CreateTranslation(0, 0, -10));
 
-	//===================================================================
-	//ハムスター初期化
-	//===================================================================
-	std::shared_ptr<HamuHamu> _Hamu = std::make_shared<HamuHamu>();
-	_Hamu->Init();
+	//太陽初期化
+	std::shared_ptr<Sun> _sun;
+	_sun = std::make_shared<Sun>();
+	_sun->Init();
+	m_GameObjList.push_back(_sun);
 
-	//★重要★
-	m_GameObjList.push_back(_Hamu);
+	//地球初期化
+	std::shared_ptr<Earth> _earth;
+	_earth = std::make_shared<Earth>();
+	_earth->Init();
+	m_GameObjList.push_back(_earth);
 
-	//===================================================================
-	//地形モデル初期化
-	//===================================================================
-	std::shared_ptr<Terrain> _Terrain = std::make_shared<Terrain>();
-	_Terrain->Init();
-
-	//★重要★
-	m_GameObjList.push_back(_Terrain);
+	//月初期化
+	std::shared_ptr<Moon> _moon;
+	_moon = std::make_shared<Moon>();
+	_moon->Init();
+	_moon->SetEarth(_earth);
+	m_GameObjList.push_back(_moon);
 
 	return true;
 }
@@ -344,8 +313,8 @@ void Application::Execute()
 
 		if (GetAsyncKeyState(VK_ESCAPE))
 		{
-			//			if (MessageBoxA(m_window.GetWndHandle(), "本当にゲームを終了しますか？",
-			//				"終了確認", MB_YESNO | MB_ICONQUESTION | MB_DEFBUTTON2) == IDYES)
+//			if (MessageBoxA(m_window.GetWndHandle(), "本当にゲームを終了しますか？",
+//				"終了確認", MB_YESNO | MB_ICONQUESTION | MB_DEFBUTTON2) == IDYES)
 			{
 				End();
 			}
