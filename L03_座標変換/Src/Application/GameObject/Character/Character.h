@@ -20,8 +20,7 @@ public:
 private:
 	std::shared_ptr<KdSquarePolygon> m_spPoly = nullptr;
 
-	Math::Matrix m_cameraMat;
-
+	
 	std::weak_ptr<KdCamera> m_wpCam;
 
 };
