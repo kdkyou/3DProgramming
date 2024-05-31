@@ -55,20 +55,20 @@
     <Filter Include="Src\Framework\Effekseer">
       <UniqueIdentifier>{c81b93e4-2f33-496a-985e-98658f1cec51}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Application\Object">
-      <UniqueIdentifier>{11e3303b-3065-4e22-95be-e8914e0028db}</UniqueIdentifier>
+    <Filter Include="Src\Application\GameObject">
+      <UniqueIdentifier>{2d517a9f-08bc-4d15-9144-8f1deeaf4b7d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Application\Object\Planets">
-      <UniqueIdentifier>{256fcba0-717f-4278-9b8e-a45c1bb19f94}</UniqueIdentifier>
+    <Filter Include="Src\Application\GameObject\Planet">
+      <UniqueIdentifier>{b69a3602-03c0-44a5-a5e0-84c3cedd5051}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Application\Object\Planets\Sun">
-      <UniqueIdentifier>{51e480a2-4522-483a-ae3f-f8988e6063de}</UniqueIdentifier>
+    <Filter Include="Src\Application\GameObject\Planet\Sun">
+      <UniqueIdentifier>{59c72357-a419-46d9-bbec-2fa814a2e90d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Application\Object\Planets\Moon">
-      <UniqueIdentifier>{8680801c-2bae-4c4a-a6eb-9da0d264150c}</UniqueIdentifier>
+    <Filter Include="Src\Application\GameObject\Planet\Moon">
+      <UniqueIdentifier>{d7086fa1-5358-4127-bd9d-58c5a34e4640}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Src\Application\Object\Planets\Earth">
-      <UniqueIdentifier>{35ccfa07-554d-42b9-b953-a090f935c57d}</UniqueIdentifier>
+    <Filter Include="Src\Application\GameObject\Planet\Earth">
+      <UniqueIdentifier>{b6d1cf82-dfa9-41e0-b3bd-975ee836ea29}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -195,17 +195,17 @@
     <ClInclude Include="Src\Framework\Effekseer\KdEffekseerManager.h">
       <Filter>Src\Framework\Effekseer</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\Object\Planets\Moon\Moon.h">
-      <Filter>Src\Application\Object\Planets\Moon</Filter>
+    <ClInclude Include="Src\Application\GameObject\Planet\PlanetBase.h">
+      <Filter>Src\Application\GameObject\Planet</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\Object\Planets\Earth\Earth.h">
-      <Filter>Src\Application\Object\Planets\Earth</Filter>
+    <ClInclude Include="Src\Application\GameObject\Planet\Sun\Sun.h">
+      <Filter>Src\Application\GameObject\Planet\Sun</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\Object\Planets\Sun\Sun.h">
-      <Filter>Src\Application\Object\Planets\Sun</Filter>
+    <ClInclude Include="Src\Application\GameObject\Planet\Moon\Moon.h">
+      <Filter>Src\Application\GameObject\Planet\Moon</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Application\Object\Planets\PlanetBase.h">
-      <Filter>Src\Application\Object\Planets</Filter>
+    <ClInclude Include="Src\Application\GameObject\Planet\Earth\Earth.h">
+      <Filter>Src\Application\GameObject\Planet\Earth</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -311,17 +311,17 @@
     <ClCompile Include="Src\Framework\Effekseer\KdEffekseerManager.cpp">
       <Filter>Src\Framework\Effekseer</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\Object\Planets\Moon\Moon.cpp">
-      <Filter>Src\Application\Object\Planets\Moon</Filter>
+    <ClCompile Include="Src\Application\GameObject\Planet\PlanetBase.cpp">
+      <Filter>Src\Application\GameObject\Planet</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\Object\Planets\Earth\Earth.cpp">
-      <Filter>Src\Application\Object\Planets\Earth</Filter>
+    <ClCompile Include="Src\Application\GameObject\Planet\Sun\Sun.cpp">
+      <Filter>Src\Application\GameObject\Planet\Sun</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\Object\Planets\Sun\Sun.cpp">
-      <Filter>Src\Application\Object\Planets\Sun</Filter>
+    <ClCompile Include="Src\Application\GameObject\Planet\Moon\Moon.cpp">
+      <Filter>Src\Application\GameObject\Planet\Moon</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Application\Object\Planets\PlanetBase.cpp">
-      <Filter>Src\Application\Object\Planets</Filter>
+    <ClCompile Include="Src\Application\GameObject\Planet\Earth\Earth.cpp">
+      <Filter>Src\Application\GameObject\Planet\Earth</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

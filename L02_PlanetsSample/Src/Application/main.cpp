@@ -1,7 +1,9 @@
 ﻿#include "main.h"
 
-#include "GameObject/Terrain/Terrain.h"
-#include "GameObject/Character/Character.h"
+#include "GameObject/Planet/Sun/Sun.h"
+#include "GameObject/Planet/Earth/earth.h"
+#include "GameObject/Planet/Moon/Moon.h"
+
 // ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
 // エントリーポイント
 // アプリケーションはこの関数から進行する
@@ -59,6 +61,10 @@ void Application::KdPostUpdate()
 // ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
 void Application::PreUpdate()
 {
+	for (std::shared_ptr<KdGameObject> spGameObj : m_spGameObjectList)
+	{
+		spGameObj->PreUpdate();
+	}
 }
 
 // ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
@@ -66,26 +72,9 @@ void Application::PreUpdate()
 // ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
 void Application::Update()
 {
-	// カメラ行列の更新
+	for (std::shared_ptr<KdGameObject> spGameObj : m_spGameObjectList)
 	{
-		// 大きさ
-		Math::Matrix _mScale = Math::Matrix::CreateScale(1);
-
-		// どれだけ傾けているか
-		Math::Matrix _mRotation = Math::Matrix::CreateRotationX(DirectX::XMConvertToRadians(45));
-
-		// 基準点(ターゲット)からどれだけ離れているか
-		Math::Matrix _mTrans = Math::Matrix::CreateTranslation(0, 6.0f, -5);
-
-		// カメラのワールド行列を作成し、適応させる
-		Math::Matrix _mWorld = _mScale * _mRotation * _mTrans;
-		m_spCamera->SetCameraMatrix(_mWorld);
-	}
-
-	// ゲームオブジェクトの更新
-	for (std::shared_ptr<KdGameObject> gameObj : m_GameObjectList)
-	{
-		gameObj->Update();
+		spGameObj->Update();
 	}
 }
 
@@ -94,6 +83,10 @@ void Application::Update()
 // ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
 void Application::PostUpdate()
 {
+	for (std::shared_ptr<KdGameObject> spGameObj : m_spGameObjectList)
+	{
+		spGameObj->PostUpdate();
+	}
 }
 
 // ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
@@ -135,6 +128,10 @@ void Application::Draw()
 	// 光を遮るオブジェクト(不透明な物体や2Dキャラ)はBeginとEndの間にまとめてDrawする
 	KdShaderManager::Instance().m_StandardShader.BeginGenerateDepthMapFromLight();
 	{
+		for (std::shared_ptr<KdGameObject> spGameObj : m_spGameObjectList)
+		{
+			spGameObj->GenerateDepthMapFromLight();
+		}
 	}
 	KdShaderManager::Instance().m_StandardShader.EndGenerateDepthMapFromLight();
 
@@ -143,9 +140,9 @@ void Application::Draw()
 	// 陰影のあるオブジェクト(不透明な物体や2Dキャラ)はBeginとEndの間にまとめてDrawする
 	KdShaderManager::Instance().m_StandardShader.BeginLit();
 	{
-		for (std::shared_ptr<KdGameObject> gameObj : m_GameObjectList)
+		for (std::shared_ptr<KdGameObject> spGameObj : m_spGameObjectList)
 		{
-			gameObj->DrawLit();
+			spGameObj->DrawLit();
 		}
 	}
 	KdShaderManager::Instance().m_StandardShader.EndLit();
@@ -185,11 +182,6 @@ void Application::DrawSprite()
 	// 2Dの描画はこの間で行う
 	KdShaderManager::Instance().m_spriteShader.Begin();
 	{
-		// ゲームオブジェクトの更新
-		for (std::shared_ptr<KdGameObject> gameObj : m_GameObjectList)
-		{
-			gameObj->DrawSprite();
-		}
 	}
 	KdShaderManager::Instance().m_spriteShader.End();
 }
@@ -260,19 +252,24 @@ bool Application::Init(int w, int h)
 	m_spCamera	= std::make_shared<KdCamera>();
 
 	//===================================================================
-	// ステージ初期化
+	// 惑星関係
 	//===================================================================
-	std::shared_ptr<Terrain> _terrain = std::make_shared<Terrain>();
-	_terrain->Init();
-	m_GameObjectList.push_back(_terrain);
+	// 太陽を追加
+	std::shared_ptr<Sun> sun = std::make_shared<Sun>();
+	sun->Init();
+	m_spGameObjectList.push_back(sun);
 
-	//===================================================================
-	// キャラクター初期化
-	//===================================================================
-	std::shared_ptr<Character> _character = std::make_shared<Character>();
-	_character->Init();
-	_character->SetCamera(m_spCamera);
-	m_GameObjectList.push_back(_character);
+	// 地球を追加
+	std::shared_ptr<Earth> earth = std::make_shared<Earth>();
+	earth->Init();
+	earth->SetParentPlanet(sun);
+	m_spGameObjectList.push_back(earth);
+
+	// 月を追加
+	std::shared_ptr<Moon> moon = std::make_shared<Moon>();
+	moon->Init();
+	moon->SetParentPlanet(earth);
+	m_spGameObjectList.push_back(moon);
 
 	return true;
 }
@@ -396,9 +393,4 @@ void Application::Release()
 
 	// ウィンドウ削除
 	m_window.Release();
-}
-
-std::shared_ptr<KdCamera> Application::GetCamera()
-{
-	return m_spCamera;
 }

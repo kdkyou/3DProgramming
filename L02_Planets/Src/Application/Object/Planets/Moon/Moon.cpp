@@ -17,9 +17,9 @@ void Moon::Update()
 		m_rotY -= 360;
 	}
 	m_rotYMat = Math::Matrix::CreateRotationY(m_rotY);
-	m_transMat = Math::Matrix::CreateTranslation(-2, 0, 0);
+	m_transMat = Math::Matrix::CreateTranslation(Math::Vector3{-2, 0, 0});
 
-	m_mWorld = m_rotYMat * m_transMat * m_rotYMat *m_earth->GetMatrix();
+	m_mWorld = m_rotYMat * m_transMat * m_rotYMat * m_earth->GetMatrix();
 }
 
 void Moon::DrawLit()
