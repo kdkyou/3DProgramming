@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+class Terrain;
+
 class Character : public KdGameObject
 {
 public:
@@ -16,11 +18,16 @@ public:
 		m_wpCam = _camera;
 	}
 
+	void SetTerrain(std::shared_ptr<Terrain>_terrain)
+	{
+		m_wpTerrain = _terrain;
+	}
 
 private:
-	std::shared_ptr<KdSquarePolygon> m_spPoly = nullptr;
-
+	std::shared_ptr<KdSquarePolygon> m_spPoly	 = nullptr;
+	std::weak_ptr<KdCamera>			 m_wpCam;
+	std::weak_ptr<Terrain>			 m_wpTerrain;
 	
-	std::weak_ptr<KdCamera> m_wpCam;
+	Math::Vector3					 m_TargetPos = Math::Vector3::Zero;
 
 };

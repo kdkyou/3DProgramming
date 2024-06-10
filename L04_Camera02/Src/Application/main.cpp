@@ -66,22 +66,6 @@ void Application::PreUpdate()
 // ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
 void Application::Update()
 {
-	// カメラ行列の更新
-	{
-		// 大きさ
-		Math::Matrix _mScale = Math::Matrix::CreateScale(1);
-
-		// どれだけ傾けているか
-		Math::Matrix _mRotation = Math::Matrix::CreateRotationX(DirectX::XMConvertToRadians(45));
-
-		// 基準点(ターゲット)からどれだけ離れているか
-		Math::Matrix _mTrans = Math::Matrix::CreateTranslation(0, 6.0f, -5);
-
-		// カメラのワールド行列を作成し、適応させる
-		Math::Matrix _mWorld = _mScale * _mRotation * _mTrans;
-		m_spCamera->SetCameraMatrix(_mWorld);
-	}
-
 	// ゲームオブジェクトの更新
 	for (std::shared_ptr<KdGameObject> gameObj : m_GameObjectList)
 	{
@@ -94,11 +78,6 @@ void Application::Update()
 // ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
 void Application::PostUpdate()
 {
-	// ゲームオブジェクトの更新
-	for (std::shared_ptr<KdGameObject> gameObj : m_GameObjectList)
-	{
-		gameObj->PostUpdate();
-	}
 }
 
 // ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
@@ -128,7 +107,10 @@ void Application::KdPostDraw()
 // ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
 void Application::PreDraw()
 {
-	m_spCamera->SetToShader();
+	for (std::shared_ptr<KdGameObject> gameObj : m_GameObjectList)
+	{
+		gameObj->PreDraw();
+	}
 }
 
 // ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
@@ -262,7 +244,6 @@ bool Application::Init(int w, int h)
 	//===================================================================
 	// カメラ初期化
 	//===================================================================
-	m_spCamera	= std::make_shared<KdCamera>();
 
 	//===================================================================
 	// ステージ初期化
@@ -276,8 +257,6 @@ bool Application::Init(int w, int h)
 	//===================================================================
 	std::shared_ptr<Character> _character = std::make_shared<Character>();
 	_character->Init();
-	_character->SetCamera(m_spCamera);
-	_character->SetTerrain(_terrain);
 	m_GameObjectList.push_back(_character);
 
 	return true;
@@ -402,14 +381,4 @@ void Application::Release()
 
 	// ウィンドウ削除
 	m_window.Release();
-}
-
-std::shared_ptr<KdCamera> Application::GetCamera()
-{
-	return m_spCamera;
-}
-
-std::vector<std::shared_ptr<KdGameObject>> Application::GetObjList()
-{
-	return m_GameObjectList;
 }
