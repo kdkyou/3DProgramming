@@ -64,6 +64,18 @@
     <Filter Include="Src\Application\GameObject\Terrain">
       <UniqueIdentifier>{6593eb98-0102-4b4c-89ae-640dafe94162}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Src\Application\GameObject\Camera">
+      <UniqueIdentifier>{e35317be-6791-42eb-a705-2933a4fcfc4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\GameObject\Camera\TrackingCamera">
+      <UniqueIdentifier>{148aa2b3-7ad8-463d-bb05-34e971a779bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\GameObject\Camera\FPSCamera">
+      <UniqueIdentifier>{0ec58037-58ba-4a2a-b374-f58ac4daf0a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Src\Application\GameObject\Camera\TPSCamera">
+      <UniqueIdentifier>{a8593713-1997-4540-8fcf-9b0c9d2b04ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Pch.h">
@@ -195,6 +207,18 @@
     <ClInclude Include="Src\Application\GameObject\Character\Character.h">
       <Filter>Src\Application\GameObject\Character</Filter>
     </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Camera\CameraBase.h">
+      <Filter>Src\Application\GameObject\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Camera\TrackingCamera\TrackingCamera.h">
+      <Filter>Src\Application\GameObject\Camera\TrackingCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Camera\FPSCamera\FPSCamera.h">
+      <Filter>Src\Application\GameObject\Camera\FPSCamera</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Application\GameObject\Camera\TPSCamera\TPSCamera.h">
+      <Filter>Src\Application\GameObject\Camera\TPSCamera</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Pch.cpp">
@@ -304,6 +328,18 @@
     </ClCompile>
     <ClCompile Include="Src\Application\GameObject\Character\Character.cpp">
       <Filter>Src\Application\GameObject\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Camera\CameraBase.cpp">
+      <Filter>Src\Application\GameObject\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Camera\TrackingCamera\TrackingCamera.cpp">
+      <Filter>Src\Application\GameObject\Camera\TrackingCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Camera\FPSCamera\FPSCamera.cpp">
+      <Filter>Src\Application\GameObject\Camera\FPSCamera</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Application\GameObject\Camera\TPSCamera\TPSCamera.cpp">
+      <Filter>Src\Application\GameObject\Camera\TPSCamera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -146,6 +146,10 @@
     <ClInclude Include="..\Library\tinygltf\stb_image.h" />
     <ClInclude Include="..\Library\tinygltf\stb_image_write.h" />
     <ClInclude Include="..\Library\tinygltf\tiny_gltf.h" />
+    <ClInclude Include="Src\Application\GameObject\Camera\CameraBase.h" />
+    <ClInclude Include="Src\Application\GameObject\Camera\FPSCamera\FPSCamera.h" />
+    <ClInclude Include="Src\Application\GameObject\Camera\TPSCamera\TPSCamera.h" />
+    <ClInclude Include="Src\Application\GameObject\Camera\TrackingCamera\TrackingCamera.h" />
     <ClInclude Include="Src\Application\GameObject\Character\Character.h" />
     <ClInclude Include="Src\Application\GameObject\Terrain\Terrain.h" />
     <ClInclude Include="Src\Application\main.h" />
@@ -186,6 +190,10 @@
     <ClInclude Include="src\Framework\Window\KdWindow.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\Application\GameObject\Camera\CameraBase.cpp" />
+    <ClCompile Include="Src\Application\GameObject\Camera\FPSCamera\FPSCamera.cpp" />
+    <ClCompile Include="Src\Application\GameObject\Camera\TPSCamera\TPSCamera.cpp" />
+    <ClCompile Include="Src\Application\GameObject\Camera\TrackingCamera\TrackingCamera.cpp" />
     <ClCompile Include="Src\Application\GameObject\Character\Character.cpp" />
     <ClCompile Include="Src\Application\GameObject\Terrain\Terrain.cpp" />
     <ClCompile Include="Src\Application\main.cpp" />
