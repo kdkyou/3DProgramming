@@ -269,8 +269,10 @@ bool Application::Init(int w, int h)
 	std::shared_ptr<TPSCamera> _camera = std::make_shared<TPSCamera>();
 	_camera->Init();
 	_camera->SetTarget(_character);
+	_camera->RegistHitObject(_terrain);
 	_character->SetCamera(_camera);
 	m_GameObjectList.push_back(_camera);
+
 
 
 	return true;

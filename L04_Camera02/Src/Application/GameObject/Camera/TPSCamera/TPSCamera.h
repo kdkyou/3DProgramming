@@ -13,5 +13,7 @@ public:
 
 private:
 
+	// デバッグ情報クラス
+	std::unique_ptr<KdDebugWireFrame> m_pDebugWire = nullptr;
 
 };

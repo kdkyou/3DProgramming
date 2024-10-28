@@ -4,7 +4,7 @@
 // エントリーポイント
 // アプリケーションはこの関数から進行する
 // ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
-int WINAPI WinMain(_In_ HINSTANCE, _In_opt_  HINSTANCE, _In_ LPSTR , _In_ int)
+int WINAPI WinMain(_In_ HINSTANCE, _In_opt_  HINSTANCE, _In_ LPSTR, _In_ int)
 {
 	// メモリリークを知らせる
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -219,7 +219,7 @@ bool Application::Init(int w, int h)
 	//===================================================================
 	// オーディオ初期化
 	//===================================================================
-	test = 5;
+	test = 0;
 
 	return true;
 }
@@ -275,8 +275,8 @@ void Application::Execute()
 
 		if (GetAsyncKeyState(VK_ESCAPE))
 		{
-//			if (MessageBoxA(m_window.GetWndHandle(), "本当にゲームを終了しますか？",
-//				"終了確認", MB_YESNO | MB_ICONQUESTION | MB_DEFBUTTON2) == IDYES)
+			//			if (MessageBoxA(m_window.GetWndHandle(), "本当にゲームを終了しますか？",
+			//				"終了確認", MB_YESNO | MB_ICONQUESTION | MB_DEFBUTTON2) == IDYES)
 			{
 				End();
 			}
